@@ -1,0 +1,129 @@
+unclassified:
+  globalConfigFiles:
+    configs:
+      - custom:
+          id: rubocop-yml
+          name: .rubocop.yml
+          comment: engineering shared rubocop file          
+          content: |
+            AllCops:
+              TargetRubyVersion: 2.4
+              Exclude:
+                - 'Gemfile'
+                - 'Guardfile'
+                - 'Rakefile'
+                - 'bin/*'
+                - 'db/migrate/**'
+                - 'db/schema.rb'
+
+            Style/Documentation:
+              Enabled: false
+
+            Metrics/ClassLength:
+              Enabled: false
+
+            Metrics/LineLength:
+              Max: 200
+
+            Metrics/MethodLength:
+              Max: 20
+
+            Metrics/AbcSize:
+              Enabled: false
+
+            Metrics/BlockLength:
+              Enabled: false
+
+            Layout/AlignParameters:
+              Enabled: false
+
+            Layout/MultilineOperationIndentation:
+              EnforcedStyle: aligned
+
+            Layout/MultilineMethodCallIndentation:
+              EnforcedStyle: indented
+
+            Style/StringLiterals:
+              Enabled: false
+
+            Style/RegexpLiteral:
+              Enabled: false
+
+            Style/GuardClause:
+              Enabled: false
+
+            Style/IfUnlessModifier:
+              Enabled: false
+
+            Style/CommentAnnotation:
+              Enabled: false
+
+            Style/SignalException:
+              Enabled: false
+
+            Style/ClassAndModuleChildren:
+              Enabled: false
+
+            Style/ConditionalAssignment:
+              Enabled: false
+
+            Style/GlobalVars:
+              Enabled: false
+
+            Style/StringLiteralsInInterpolation:
+              Enabled: false
+
+            Performance/EndWith:
+              Enabled: false
+
+            Style/FrozenStringLiteralComment:
+              Enabled: false
+
+            Style/MutableConstant:
+              Enabled: false
+
+            Style/MultilineBlockChain:
+              Enabled: false
+
+            Style/DoubleNegation:
+              Enabled: false
+
+            Style/Lambda:
+              Enabled: false
+
+            Lint/AmbiguousOperator:
+              Exclude:
+                - 'spec/factories/**'
+
+            Lint/Void:
+              Exclude:
+
+            Style/RaiseArgs:
+              EnforcedStyle: compact
+
+            Style/NumericPredicate:
+              Enabled: false
+
+            Bundler/OrderedGems:
+              Enabled: false
+
+            Lint/Void:
+              Enabled: false
+
+            Naming/PredicateName:
+              Enabled: false
+
+            Style/SafeNavigation:
+              Enabled: false
+
+            Style/RescueStandardError:
+              EnforcedStyle: implicit
+
+            Rails/UnknownEnv:
+              Environments:
+                - test
+                - onprem
+                - production
+
+            Style/FormatStringToken:
+              EnforcedStyle: template

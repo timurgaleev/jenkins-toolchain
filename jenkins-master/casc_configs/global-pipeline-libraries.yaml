@@ -1,0 +1,18 @@
+unclassified:
+  globalLibraries:
+    libraries:
+      - name: "jenkins-libs"
+        defaultVersion: "master"
+        implicit: true
+        allowVersionOverride: true
+        includeInChangeSets: true
+        retriever:
+          modernSCM:
+            scm:
+              github:
+                credentialsId: "github-api-token"
+                repoOwner: "timurgaleev"
+                repository: "jenkins-libs"
+                traits:
+                  - gitHubBranchDiscovery:
+                      strategyId: 1
