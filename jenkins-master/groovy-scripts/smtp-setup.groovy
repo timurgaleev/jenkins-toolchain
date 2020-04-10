@@ -31,7 +31,7 @@ Thread.start {
   emailext.charset = "UTF-8"
   emailext.defaultContentType = "text/html"
   emailext.defaultReplyTo = "timur_galeev@outlook.com"
-  emailext.recipientList = "aksissound@gmail.com"
+  emailext.recipientList = "galeev@timzu.com"
 
   instance.save()
   println '--> Configuring smtp... done'

@@ -1,0 +1,269 @@
+version: '3.7'
+
+networks:
+  monitor-net:
+    driver: bridge
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+    nexus-data: {}
+
+services:
+
+################################# Prometheus service
+  prometheus:
+    image: prom/prometheus:v2.17.1
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    expose:
+      - 9090
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+        reservations:
+          memory: 100M
+    healthcheck:
+      test: 'wget -q --spider http://127.0.0.1:9090/-/ready || exit 1'
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+################################## AlertManager service          
+  alertmanager:
+    image: prom/alertmanager:v0.20.0
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    restart: unless-stopped
+    expose:
+      - 9093
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+####################################### NodeExporter service
+  nodeexporter:
+    image: prom/node-exporter:v0.18.1
+    container_name: nodeexporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+    expose:
+      - 9100
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+######################################## cAdvisor service
+  cadvisor:
+    image: gcr.io/google-containers/cadvisor:v0.34.0
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+    restart: unless-stopped
+    expose:
+      - 8080
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+####################################### Grafana service
+  grafana:
+    image: grafana/grafana:6.7.1
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: unless-stopped
+    healthcheck:
+      test: 'wget -q --spider http://127.0.0.1:3000/api/health || exit 1'
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    expose:
+      - 3000
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+####################################### Pushgateway service
+  pushgateway:
+    image: prom/pushgateway:v1.2.0
+    container_name: pushgateway
+    restart: unless-stopped
+    expose:
+      - 9091
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+####################################### Caddy service
+  caddy:
+    build: 
+      context: ./caddy/
+    container_name: caddy
+    ports:
+      - "3000:3000"
+      - "9090:9090"
+      - "9093:9093"
+      - "9091:9091"
+    volumes:
+      - ./caddy:/etc/caddy
+    environment:
+      - ADMIN_USER=${ADMIN_USER}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    restart: unless-stopped
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+######################################## Jenkins service
+  jenkins:
+    build: 
+      context: ./jenkins-master/
+    container_name: jenkins
+    restart: unless-stopped
+    environment:
+      # - JENKINS_ENVIRONMENT=staging
+      - JENKINS_SLAVE_AGENT_PORT=50000
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false -Djenkins.slaves.NioChannelSelector.disabled=true -Djenkins.slaves.JnlpSlaveAgentProtocol3.enabled=false
+      - JENKINS_OPTS=--httpListenAddress=0.0.0.0 --httpPort=8080 --ajp13Port=-1 --sessionTimeout=10080 --sessionEviction=43200
+      - GOOGLE_AUTH=disabled
+      - JENKINS_USERNAME=${ADMIN_USER}
+      - JENKINS_USER_PASSWORD=${ADMIN_PASSWORD}
+      # - JENKINS_THEME_PATH=/userContent/material-light-blue.css
+      # - VAULT_ADDRESS=???????
+      # - SONARQUBE_SERVER_URL=localhost:19000
+      # - JENKINS_ROOT_URL=https://${local.dns_name}
+      # - AWS_ACCOUNT=?????????
+      # - JENKINS_IAM_ROLE=?????????
+      # - GITHUB_API_TOKEN=?????????
+      # - GOOGLE_APP_CLIENT_ID=???????????
+      # - GOOGLE_APP_SECRET=??????????????
+      # - GOOGLE_ACCOUNT_DOMAIN=timzu.com
+      # - LOG_DESTINATION=tcp+tls://logs6.papertrailapp.com:32171
+      # - REGION=us-west-1
+      # - SMTP_HOST=email-smtp.exmple.com
+      # - SMTP_USER=????????
+      # - SMTP_PASSWORD=????????
+      # - NEXUS_PORT=18081
+      # - SONAR_PORT=9000
+      # - SONAR_DB_PORT=5432
+    networks:
+      - monitor-net
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+        reservations:
+          memory: 100M
+
+######################################## Jenkins JNLP agent service
+  jenkins-agent:
+    image: jenkins/jnlp-slave:4.0.1-1-alpine
+    container_name: jenkins-agent
+    restart: always
+    environment:
+      JENKINS_URL: http://localhost:8080
+      JENKINS_TUNNEL: localhost:50000
+      JENKINS_SECRET: ${JENKINS_SECRET}
+      JENKINS_AGENT_NAME: Agent-timurgaleev
+      JENKINS_AGENT_WORKDIR: /home/jenkins
+    volumes:
+      - /home/lparet/.ssh/id_rsa:/home/jenkins/.ssh/id_rsa
+
+
+  # sonarqube:
+  #   restart: unless-stopped
+  #   image: sonarqube
+  #   container_name: sonarqube
+  #   expose:
+  #     - 9000
+  #   networks:
+  #     - monitor-net
+  #   environment:
+  #     - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonar
+  #     - SONARQUBE_JDBC_USERNAME=sonar
+  #     - SONARQUBE_JDBC_PASSWORD=sonar
+  #   volumes:
+  #     - ./sonarqube_conf:/opt/sonarqube/conf
+  #     - ./sonarqube_data:/opt/sonarqube/data
+  #     - ./sonarqube_extensions:/opt/sonarqube/extensions
+  #     - ./sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+  #   ports:
+  #     - "19000:9000"
+  #     - "19002:9002"
+  #   depends_on:
+  #     - sonardb
+
+  # sonardb:
+  #   image: postgres
+  #   container_name: sonardb
+  #   networks:
+  #     - monitor-net
+  #   environment:
+  #     - POSTGRES_USER=sonar
+  #     - POSTGRES_PASSWORD=sonar
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgresql:/var/lib/postgresql
+  #     - postgresql_data:/var/lib/postgresql/data
+  
+  # nexus:
+  #   container_name: nexus
+  #   image: sonatype/nexus3
+  #   restart: always
+  #   expose:
+  #     - 8081
+  #   ports:
+  #     - "18081:8081"
+  #   networks:
+  #     - monitor-net
+  #   volumes:
+  #     - nexus-data:/nexus-data

@@ -45,28 +45,4 @@ vaultAppRoleSecret = new VaultAppRoleCredential(
 )
 credentials_store.addCredentials(global_domain, vaultAppRoleSecret)
 
-rubocopymlSecretText = new StringCredentialsImpl(
-  CredentialsScope.GLOBAL,
-  'rubocop-yaml-id',
-  'Shared rubocop file from Config File Management',
-  Secret.fromString('rubocop-yml')
-)
-credentials_store.addCredentials(global_domain, rubocopymlSecretText)
-
-capistranoAppsSecretText = new StringCredentialsImpl(
-  CredentialsScope.GLOBAL,
-  'capistrano-apps',
-  'Apps that needs capistrano deployment, formatted as app-env (current value: none)',
-  Secret.fromString('none')
-)
-credentials_store.addCredentials(global_domain, capistranoAppsSecretText)
-
-capistranoOnlySecretText = new StringCredentialsImpl(
-  CredentialsScope.GLOBAL,
-  'capistrano-only',
-  'List of apps and env that only deploy to capistrano and not to ECS, separated by comma (current value: none)',
-  Secret.fromString('none')
-)
-credentials_store.addCredentials(global_domain, capistranoOnlySecretText)
-
 provider.save()

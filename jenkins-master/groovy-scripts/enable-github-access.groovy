@@ -21,8 +21,8 @@ credentials_store.addCredentials(global_domain, secretText)
 githubUsernamePassword = new UsernamePasswordCredentialsImpl(
   CredentialsScope.GLOBAL,
   'github-api-token',
-  'Username and github api token to access private repos (cf-deployer)',
-  'cf-deployer',
+  'Username and github api token to access private repos (timurgaleev)',
+  'timurgaleev',
   Secret.fromString(System.getenv('GITHUB_API_TOKEN')).getPlainText()
 )
 credentials_store.addCredentials(global_domain, githubUsernamePassword)
