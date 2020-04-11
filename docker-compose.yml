@@ -148,6 +148,8 @@ services:
       - "9090:9090"
       - "9093:9093"
       - "9091:9091"
+      - "8080:8080"
+      - "50000:50000"
     volumes:
       - ./caddy:/etc/caddy
     environment:
@@ -193,9 +195,12 @@ services:
       # - SONAR_DB_PORT=5432
     networks:
       - monitor-net
-    ports:
-      - "8080:8080"
-      - "50000:50000"
+    # ports:
+    #   - "8080:8080"
+    #   - "50000:50000"
+    expose:
+      - 8080
+      - 50000
     deploy:
       resources:
         limits:
@@ -214,8 +219,11 @@ services:
       JENKINS_SECRET: ${JENKINS_SECRET}
       JENKINS_AGENT_NAME: Agent-timurgaleev
       JENKINS_AGENT_WORKDIR: /home/jenkins
-    volumes:
-      - /home/lparet/.ssh/id_rsa:/home/jenkins/.ssh/id_rsa
+    expose:
+      - 8080
+      - 50000
+    # volumes:
+    #   - /home/lparet/.ssh/id_rsa:/home/jenkins/.ssh/id_rsa
 
 
   # sonarqube:

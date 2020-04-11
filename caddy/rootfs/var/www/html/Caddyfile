@@ -1,4 +1,6 @@
-:9090 {
+
+
+0.0.0.0:9090 {
     basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
     proxy / prometheus:9090 {
             transparent
@@ -8,7 +10,7 @@
     tls off
 }
 
-:9093 {
+0.0.0.0:9093 {
     basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
     proxy / alertmanager:9093 {
             transparent
@@ -18,7 +20,7 @@
     tls off
 }
 
-:9091 {
+0.0.0.0:9091 {
     basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
     proxy / pushgateway:9091 {
             transparent
@@ -28,8 +30,27 @@
     tls off
 }
 
-:3000 {
+0.0.0.0:3000 {
     proxy / grafana:3000 {
+            transparent
+            websocket
+        }
+
+    errors stderr
+    tls off
+}
+0.0.0.0:8080 {
+    proxy / jenkins:8080 {
+            transparent
+            websocket
+        }
+
+    errors stderr
+    tls off
+}
+
+0.0.0.0:50000 {
+    proxy / jenkins-agent:50000 {
             transparent
             websocket
         }

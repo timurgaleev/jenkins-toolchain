@@ -68,7 +68,7 @@ groups:
       summary: "Jenkins high memory usage"
       description: "Jenkins memory consumption is at {{ humanize $value}}."
 
-  - name: Jenkins
+- name: Jenkins
   rules:
   - alert: NodeOnline
     expr: jenkins_node_online_value < 2
