@@ -138,11 +138,14 @@ services:
     labels:
       org.label-schema.group: "monitoring"
 
-####################################### Caddy service
-  caddy:
-    build: 
-      context: ./caddy/
-    container_name: caddy
+####################################### Nginx service
+  nginx:
+    image: nginx:alpine
+    container_name: monitor_nginx
+    command: ["nginx", "-c", "/etc/nginx/nginx.conf"]
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    restart: unless-stopped
     ports:
       - "3000:3000"
       - "9090:9090"
@@ -150,16 +153,8 @@ services:
       - "9091:9091"
       - "8080:8080"
       - "50000:50000"
-    volumes:
-      - ./caddy:/etc/caddy
-    environment:
-      - ADMIN_USER=${ADMIN_USER}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-    restart: unless-stopped
     networks:
       - monitor-net
-    labels:
-      org.label-schema.group: "monitoring"
 
 ######################################## Jenkins service
   jenkins:
@@ -209,19 +204,19 @@ services:
           memory: 100M
 
 ######################################## Jenkins JNLP agent service
-  jenkins-agent:
-    image: jenkins/jnlp-slave:4.0.1-1-alpine
-    container_name: jenkins-agent
-    restart: always
-    environment:
-      JENKINS_URL: http://localhost:8080
-      JENKINS_TUNNEL: localhost:50000
-      JENKINS_SECRET: ${JENKINS_SECRET}
-      JENKINS_AGENT_NAME: Agent-timurgaleev
-      JENKINS_AGENT_WORKDIR: /home/jenkins
-    expose:
-      - 8080
-      - 50000
+  # jenkins-agent:
+  #   image: jenkins/jnlp-slave:4.0.1-1-alpine
+  #   container_name: jenkins-agent
+  #   restart: always
+  #   environment:
+  #     JENKINS_URL: http://localhost:8080
+  #     JENKINS_TUNNEL: localhost:50000
+  #     JENKINS_SECRET: ${JENKINS_SECRET}
+  #     JENKINS_AGENT_NAME: Agent-timurgaleev
+  #     JENKINS_AGENT_WORKDIR: /home/jenkins
+  #   expose:
+  #     - 8080
+  #     - 50000
     # volumes:
     #   - /home/lparet/.ssh/id_rsa:/home/jenkins/.ssh/id_rsa
 
