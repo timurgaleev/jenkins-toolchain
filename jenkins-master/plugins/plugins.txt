@@ -45,6 +45,7 @@ pipeline-model-definition
 prometheus
 role-strategy
 script-security
+ssh-slaves
 simple-theme-plugin
 sonar
 terraform

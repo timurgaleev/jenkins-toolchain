@@ -1630,7 +1630,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Jenkins-master-status",
+  "title": "Jenkins-status",
   "uid": "CyA28m5Wk",
   "version": 6
 }

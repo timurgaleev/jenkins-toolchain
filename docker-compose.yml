@@ -165,6 +165,7 @@ services:
     environment:
       # - JENKINS_ENVIRONMENT=staging
       - JENKINS_SLAVE_AGENT_PORT=50000
+      - JENKINS_AGENT_NAME=jenkins-slave-1
       - JAVA_OPTS=-Djenkins.install.runSetupWizard=false -Djenkins.slaves.NioChannelSelector.disabled=true -Djenkins.slaves.JnlpSlaveAgentProtocol3.enabled=false
       - JENKINS_OPTS=--httpListenAddress=0.0.0.0 --httpPort=8080 --ajp13Port=-1 --sessionTimeout=10080 --sessionEviction=43200
       - GOOGLE_AUTH=disabled
@@ -204,22 +205,27 @@ services:
           memory: 100M
 
 ######################################## Jenkins JNLP agent service
-  # jenkins-agent:
-  #   image: jenkins/jnlp-slave:4.0.1-1-alpine
-  #   container_name: jenkins-agent
-  #   restart: always
-  #   environment:
-  #     JENKINS_URL: http://localhost:8080
-  #     JENKINS_TUNNEL: localhost:50000
-  #     JENKINS_SECRET: ${JENKINS_SECRET}
-  #     JENKINS_AGENT_NAME: Agent-timurgaleev
-  #     JENKINS_AGENT_WORKDIR: /home/jenkins
-  #   expose:
-  #     - 8080
-  #     - 50000
-    # volumes:
-    #   - /home/lparet/.ssh/id_rsa:/home/jenkins/.ssh/id_rsa
-
+  jenkins-agent:
+    build: 
+      context: ./jenkins-slave/
+    # image: jenkinsci/ssh-slave
+    container_name: jenkins-agent
+    restart: always
+    # environment:
+      # - JENKINS_SLAVE_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDtmThSTRTmKKTsacOV5b5impc7aVoEhfuFLBv2HZddF+qRfKcGEjLtCxn+zQYnZgru8V7EEluVkZJg7sK7c+skfRYkckkh5/5rySRwKkAYbddqiu/kWwSdGJJOpBj/D5UIGm+AfNz5uPzZNl2ACqgi8EQfBv0PTQm6AOShAIfkdg1DYozSzhtkvrusSIuvhBrgVQYT1WSBksazzrZeF+SGHrglnav+3cXz+9mka6mn+CtyORT89XwZzUy4TELRZg/QedztSdSYOT17e9IWIrG37rUEGjwfH3TS8PACd9Xe1Wa0xGmHvGJVxJcP4pbY4mW1QZITUX5MSPEO+t1KtOz9
+      # JENKINS_URL: http://jenkins:8080
+      # # JENKINS_TUNNEL: localhost:50000
+      # JENKINS_SECRET: ${JENKINS_SECRET}
+      # JENKINS_AGENT_NAME: jenkins-slave-1
+    depends_on:
+      - jenkins
+    ports:
+      - "22:22"
+    # expose:
+    #   - 50000
+    networks:
+      - monitor-net
+    
 
   # sonarqube:
   #   restart: unless-stopped
