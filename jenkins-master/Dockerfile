@@ -17,8 +17,6 @@ USER jenkins
 
 COPY plugins/plugins.txt /usr/share/jenkins/ref/
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
-# Twistlock plugin is added manually
-# COPY plugins/twistlock-jenkins-plugin.hpi /usr/share/jenkins/ref/plugins/
 
 COPY casc_configs/* /usr/share/jenkins/ref/casc_configs/
 COPY email-templates/* /usr/share/jenkins/ref/email-templates/
