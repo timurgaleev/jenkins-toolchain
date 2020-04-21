@@ -1596,7 +1596,9 @@
   "refresh": "5s",
   "schemaVersion": 19,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "jenkins"
+  ],
   "templating": {
     "list": []
   },
@@ -1630,7 +1632,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Jenkins-status",
+  "title": "Jenkins status",
   "uid": "CyA28m5Wk",
   "version": 6
 }

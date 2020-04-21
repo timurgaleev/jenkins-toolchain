@@ -54,7 +54,7 @@ Grafana is preconfigured with dashboards and Prometheus as the default data sour
 ## Setup alerting
 
 The AlertManager service is responsible for handling alerts sent by Prometheus server.
-AlertManager can send notifications via email, Pushover, Slack, HipChat or any other system that exposes a webhook interface.
+AlertManager can send notifications via email, Pushover, Slack, Rocketchat or any other system that exposes a webhook interface.
 A complete list of integrations can be found [here](https://prometheus.io/docs/alerting/configuration).
 
 You can view and silence notifications by accessing `http://<host-ip>:9093`.

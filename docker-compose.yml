@@ -191,9 +191,6 @@ services:
       # - SONAR_DB_PORT=5432
     networks:
       - monitor-net
-    # ports:
-    #   - "8080:8080"
-    #   - "50000:50000"
     expose:
       - 8080
       - 50000
@@ -204,75 +201,17 @@ services:
         reservations:
           memory: 100M
 
-######################################## Jenkins JNLP agent service
+######################################## Jenkins agent service
   jenkins-agent:
     build: 
       context: ./jenkins-slave/
-    # image: jenkinsci/ssh-slave
     container_name: jenkins-agent
     restart: always
-    # environment:
-      # - JENKINS_SLAVE_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDtmThSTRTmKKTsacOV5b5impc7aVoEhfuFLBv2HZddF+qRfKcGEjLtCxn+zQYnZgru8V7EEluVkZJg7sK7c+skfRYkckkh5/5rySRwKkAYbddqiu/kWwSdGJJOpBj/D5UIGm+AfNz5uPzZNl2ACqgi8EQfBv0PTQm6AOShAIfkdg1DYozSzhtkvrusSIuvhBrgVQYT1WSBksazzrZeF+SGHrglnav+3cXz+9mka6mn+CtyORT89XwZzUy4TELRZg/QedztSdSYOT17e9IWIrG37rUEGjwfH3TS8PACd9Xe1Wa0xGmHvGJVxJcP4pbY4mW1QZITUX5MSPEO+t1KtOz9
-      # JENKINS_URL: http://jenkins:8080
-      # # JENKINS_TUNNEL: localhost:50000
-      # JENKINS_SECRET: ${JENKINS_SECRET}
-      # JENKINS_AGENT_NAME: jenkins-slave-1
     depends_on:
       - jenkins
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "22:22"
-    # expose:
-    #   - 50000
     networks:
       - monitor-net
-    
-
-  # sonarqube:
-  #   restart: unless-stopped
-  #   image: sonarqube
-  #   container_name: sonarqube
-  #   expose:
-  #     - 9000
-  #   networks:
-  #     - monitor-net
-  #   environment:
-  #     - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonar
-  #     - SONARQUBE_JDBC_USERNAME=sonar
-  #     - SONARQUBE_JDBC_PASSWORD=sonar
-  #   volumes:
-  #     - ./sonarqube_conf:/opt/sonarqube/conf
-  #     - ./sonarqube_data:/opt/sonarqube/data
-  #     - ./sonarqube_extensions:/opt/sonarqube/extensions
-  #     - ./sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
-  #   ports:
-  #     - "19000:9000"
-  #     - "19002:9002"
-  #   depends_on:
-  #     - sonardb
-
-  # sonardb:
-  #   image: postgres
-  #   container_name: sonardb
-  #   networks:
-  #     - monitor-net
-  #   environment:
-  #     - POSTGRES_USER=sonar
-  #     - POSTGRES_PASSWORD=sonar
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - postgresql:/var/lib/postgresql
-  #     - postgresql_data:/var/lib/postgresql/data
-  
-  # nexus:
-  #   container_name: nexus
-  #   image: sonatype/nexus3
-  #   restart: always
-  #   expose:
-  #     - 8081
-  #   ports:
-  #     - "18081:8081"
-  #   networks:
-  #     - monitor-net
-  #   volumes:
-  #     - nexus-data:/nexus-data

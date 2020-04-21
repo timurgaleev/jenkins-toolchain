@@ -1,11 +1,30 @@
+# route:
+#     receiver: 'slack'
+
+# receivers:
+#     - name: 'slack'
+#       slack_configs:
+#           - send_resolved: true
+#             text: "{{ .CommonAnnotations.description }}"
+#             username: 'Prometheus'
+#             channel: '#<channel-name>'
+#             api_url: 'https://hooks.slack.com/services/<webhook-id>'
+# route:
+#     repeat_interval: 30m
+#     group_interval: 30m
+#     receiver: 'rocketchat'
+
+# receivers:
+#     - name: 'rocketchat'
+#       webhook_configs:
+#           - send_resolved: false
+#             url: '${WEBHOOK_URL}'
+
 route:
-    receiver: 'slack'
+  receiver: pushover
 
 receivers:
-    - name: 'slack'
-      slack_configs:
-          - send_resolved: true
-            text: "{{ .CommonAnnotations.description }}"
-            username: 'Prometheus'
-            channel: '#<channel-name>'
-            api_url: 'https://hooks.slack.com/services/<webhook-id>'
+  - name: pushover
+    pushover_configs:
+      - token: amzh833vp6hq4trimwhjakrudpppca
+        user_key: up3rtyvecmbcue4hbd8v4a48ie5xp7
