@@ -193,7 +193,6 @@ services:
       - monitor-net
     expose:
       - 8080
-      - 50000
     deploy:
       resources:
         limits:
