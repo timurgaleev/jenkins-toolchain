@@ -1,5 +1,5 @@
-A monitoring solution for Docker hosts and containers with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/), [cAdvisor](https://github.com/google/cadvisor),
-[NodeExporter](https://github.com/prometheus/node_exporter) and alerting with [AlertManager](https://github.com/prometheus/alertmanager).
+A monitoring solution for Docker hosts, Jenkins and containers with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/), [cAdvisor](https://github.com/google/cadvisor),
+[NodeExporter](https://github.com/prometheus/node_exporter), [Jenkins](https://github.com/jenkinsci/jenkins) and alerting with [AlertManager](https://github.com/prometheus/alertmanager).
 
 Containers:
 
@@ -11,6 +11,7 @@ Containers:
 * cAdvisor (containers metrics collector)
 * Caddy (reverse proxy and basic auth provider for prometheus and alertmanager)
 * Jenkins (CI-CD) `http://<host-ip>:8081`
+* Jenkins agent slave via a SSH
 
 ## Jenkins configuration
 
