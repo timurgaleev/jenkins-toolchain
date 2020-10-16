@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 LABEL maintainer=" Timur Galeev <timur_galeev@outlook.com>" \
       description="Docker image to build Java applications."
