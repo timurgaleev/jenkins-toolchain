@@ -10,7 +10,7 @@ authorize-project
 basic-branch-build-strategies
 blueocean
 bootstraped-multi-test-results-report
-bouncycastle-api:2.17
+bouncycastle-api:2.18
 build-blocker-plugin
 build-keeper-plugin
 build-token-root
