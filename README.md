@@ -32,12 +32,6 @@ grafana:
     - config
 
 ```
-and the config file format should have this content
-```
-GF_SECURITY_ADMIN_USER=admin
-GF_SECURITY_ADMIN_PASSWORD=changeme
-GF_USERS_ALLOW_SIGN_UP=false
-```
 If you want to change the password, you have to remove this entry, otherwise the change will not take effect
 ```
 - grafana_data:/var/lib/grafana

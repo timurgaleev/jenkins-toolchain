@@ -1,4 +1,3 @@
-s
 import jenkins.model.Jenkins
 import org.jenkinsci.plugins.githubautostatus.BuildStatusConfig
 
