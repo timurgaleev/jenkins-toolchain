@@ -189,6 +189,8 @@ services:
       # - NEXUS_PORT=18081
       # - SONAR_PORT=9000
       # - SONAR_DB_PORT=5432
+    volumes:
+      - ./tmp/jenkins_home:/var/jenkins_home
     networks:
       - monitor-net
     expose:
