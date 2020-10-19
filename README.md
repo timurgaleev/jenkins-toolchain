@@ -1,3 +1,8 @@
+# Jenkins docker-compose with toolchain
+
+[![GitHub Actions status](https://github.com/timurgaleev/jenkins-toolchain/workflows/push/badge.svg)](https://github.com/timurgaleev/jenkins-toolchain/actions)
+[![GitHub Releases](https://img.shields.io/github/release/timurgaleev/jenkins-toolchain.svg)](https://github.com/timurgaleev/jenkins-toolchain/releases)
+
 A monitoring solution for Docker hosts, Jenkins and containers with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/), [cAdvisor](https://github.com/google/cadvisor),
 [NodeExporter](https://github.com/prometheus/node_exporter), [Jenkins](https://github.com/jenkinsci/jenkins) and alerting with [AlertManager](https://github.com/prometheus/alertmanager).
 
