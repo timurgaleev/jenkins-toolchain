@@ -45,7 +45,7 @@ services:
       retries: 3
       start_period: 10s
 
-################################## AlertManager service          
+################################## AlertManager service
   alertmanager:
     image: prom/alertmanager:v0.20.0
     container_name: alertmanager
@@ -158,7 +158,7 @@ services:
 
 ######################################## Jenkins service
   jenkins:
-    build: 
+    build:
       context: ./jenkins-master/
     container_name: jenkins
     restart: unless-stopped
@@ -189,8 +189,8 @@ services:
       # - NEXUS_PORT=18081
       # - SONAR_PORT=9000
       # - SONAR_DB_PORT=5432
-    volumes:
-      - ./tmp/jenkins_home:/var/jenkins_home
+    # volumes:
+    #   - ./tmp/jenkins_home:/var/jenkins_home
     networks:
       - monitor-net
     expose:
@@ -204,7 +204,7 @@ services:
 
 ######################################## Jenkins agent service
   jenkins-agent:
-    build: 
+    build:
       context: ./jenkins-slave/
     container_name: jenkins-agent
     restart: always

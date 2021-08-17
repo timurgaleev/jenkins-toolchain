@@ -3,14 +3,12 @@ ansicolor
 ant
 amazon-ecr
 amazon-ecs
-analysis-collector
-analysis-core
 antisamy-markup-formatter
 authorize-project
 basic-branch-build-strategies
 blueocean
 bootstraped-multi-test-results-report
-bouncycastle-api:2.18
+bouncycastle-api
 build-blocker-plugin
 build-keeper-plugin
 build-token-root
@@ -24,7 +22,7 @@ email-ext
 external-monitor-job:1.7
 git
 github-autostatus
-github-organization-folder
+github-branch-source
 google-kubernetes-engine
 google-login
 gradle

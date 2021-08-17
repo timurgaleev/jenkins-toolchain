@@ -1,15 +1,15 @@
 FROM ubuntu:20.04
 
 LABEL maintainer=" Timur Galeev <timur_galeev@outlook.com>" \
-      description="Docker image to build Java applications."
+  description="Docker image to build Java applications."
 
 #================================================
 # Customize sources for apt-get
 #================================================
 RUN DISTRIB_CODENAME=$(cat /etc/*release* | grep DISTRIB_CODENAME | cut -f2 -d'=') \
-    && echo "deb http://archive.ubuntu.com/ubuntu ${DISTRIB_CODENAME} main universe\n" > /etc/apt/sources.list \
-    && echo "deb http://archive.ubuntu.com/ubuntu ${DISTRIB_CODENAME}-updates main universe\n" >> /etc/apt/sources.list \
-    && echo "deb http://security.ubuntu.com/ubuntu ${DISTRIB_CODENAME}-security main universe\n" >> /etc/apt/sources.list
+  && echo "deb http://archive.ubuntu.com/ubuntu ${DISTRIB_CODENAME} main universe\n" > /etc/apt/sources.list \
+  && echo "deb http://archive.ubuntu.com/ubuntu ${DISTRIB_CODENAME}-updates main universe\n" >> /etc/apt/sources.list \
+  && echo "deb http://security.ubuntu.com/ubuntu ${DISTRIB_CODENAME}-security main universe\n" >> /etc/apt/sources.list
 
 RUN apt-get update -qqy \
   && apt-get -qqy --no-install-recommends install software-properties-common \
@@ -19,25 +19,25 @@ RUN apt-get update -qqy \
 RUN apt-get update \
   && apt-get upgrade -y --autoremove \
   && apt-get --no-install-recommends install -qqy \
-    git \
-    locales \
-    tar zip unzip \
-    wget curl \
-    python python-pip groff \
-    jq \
-    parallel \
-    uuid-runtime \
-    git-lfs \
-    less vim tree \
-    openssh-server \
-    build-essential \
-    openjdk-8-jdk \
-    apt-transport-https \
-    ca-certificates \
-    gnupg-agent \
-    rlwrap \
-    rsync \
-    software-properties-common \
+  git \
+  locales \
+  tar zip unzip \
+  wget curl \
+  python pip groff \
+  jq \
+  parallel \
+  uuid-runtime \
+  git-lfs \
+  less vim tree \
+  openssh-server \
+  build-essential \
+  openjdk-8-jdk \
+  apt-transport-https \
+  ca-certificates \
+  gnupg-agent \
+  rlwrap \
+  rsync \
+  software-properties-common \
   && rm -rf /var/lib/apt/lists/* \
   && sed -i 's/securerandom\.source=file:\/dev\/random/securerandom\.source=file:\/dev\/urandom/' ./usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
 
@@ -72,8 +72,8 @@ ENV LC_ALL en_US.UTF-8
 # Add user jenkins to the image
 #====================================
 RUN adduser --quiet jenkins && \
-    echo "jenkins:jenkins" | chpasswd && \
-    mkdir /home/jenkins/.m2
+  echo "jenkins:jenkins" | chpasswd && \
+  mkdir /home/jenkins/.m2
 
 #====================================
 # Docker
@@ -106,7 +106,7 @@ RUN mkdir -p /home/jenkins/.local/bin/ \
 # See https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
 #====================================
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash \
-    && apt-get install -y nodejs
+  && apt-get install -y nodejs
 
 #====================================
 # Kubernetes CLI
@@ -120,9 +120,9 @@ RUN curl https://storage.googleapis.com/kubernetes-release/release/v1.16.1/bin/l
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
 
 RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd && \
-    mkdir -p /var/run/sshd && \
-    chown -R jenkins:jenkins /home/jenkins/.m2/ && \
-    chown -R jenkins:jenkins /home/jenkins/.ssh/
+  mkdir -p /var/run/sshd && \
+  chown -R jenkins:jenkins /home/jenkins/.m2/ && \
+  chown -R jenkins:jenkins /home/jenkins/.ssh/
 
 # Standard SSH port
 EXPOSE 22
